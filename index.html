@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valorant - Featured Agents</title>
+<style>
+
+  /* RESET AND BASE */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0b0b0b;
+  color: #eee;
+  overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #e03a3e;
+  border-radius: 4px;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(11,11,11,0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  z-index: 1000;
+  border-bottom: 1px solid #222;
+  transition: background 0.3s ease;
+}
+header.scrolled {
+  background: #0b0b0b;
+  box-shadow: 0 2px 8px rgba(224,58,62,0.5);
+}
+
+/* NAVIGATION */
+nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-weight: 900;
+  font-size: 1.75rem;
+  color: #e03a3e;
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+.nav-links a {
+  font-weight: 600;
+  font-size: 1rem;
+  position: relative;
+  padding: 0.25rem 0;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: #e03a3e;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #e03a3e;
+  transition: width 0.3s ease;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%;
+}
+
+/* HAMBURGER MENU */
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* RESPONSIVE NAVIGATION */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    background: #0b0b0b;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 2rem;
+    display: none;
+  }
+
+  .nav-links a {
+    padding: 0.75rem 0;
+    font-size: 1.2rem;
+    width: 100%;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* HERO SECTION */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  max-height: 900px;
+  padding: 0 4rem;
+  background:
+    linear-gradient(to right, rgba(224,58,62,0.9) 0%, rgba(11,11,11,0.9) 70%),
+    url('https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blt2004e8b1f0c0e461/615f9d6e4b3f6d5dbfc8ead5/valorant-wallpaper-fade-3840x2160.jpg') no-repeat center center/cover;
+  color: #fff;
+  text-shadow: 0 0 20px #b11717;
+}
+.hero h1 {
+  font-size: 4rem;
+  line-height: 1.1;
+  max-width: 700px;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+.hero p {
+  font-size: 1.4rem;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+.btn-primary {
+  background-color: #e03a3e;
+  color: #fff;
+  padding: 0.85rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  box-shadow: 0 5px 15px rgba(224, 58, 62, 0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #b03233;
+  box-shadow: 0 8px 20px rgba(176, 50, 51, 0.9);
+}
+
+/* SECTION STYLING */
+section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem 6rem;
+}
+section h2 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #e03a3e;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px #b11717;
+}
+
+/* AGENT GRID */
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 2rem;
+}
+.agent-card {
+  background: #181818;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(224,58,62,0.4);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.agent-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(224,58,62,0.7);
+}
+.agent-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.agent-info {
+  padding: 1.2rem 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.agent-info h3 {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #f04444;
+  margin: 0 0 0.5rem 0;
+}
+.agent-info p {
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #aaa;
+}
+.agent-info .btn-secondary {
+  font-size: 0.85rem;
+  margin-top: 1rem;
+  align-self: start;
+  background: transparent;
+  border: 2px solid #e03a3e;
+  color: #e03a3e;
+  padding: 0.4rem 1.2rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: background 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+.agent-info .btn-secondary:hover {
+  background: #e03a3e;
+  color: #fff;
+}
+
+/* ARTICLE */
+#big-article {
+  max-width: 800px;
+  margin: 0 auto 6rem;
+  background: #181818;
+  border-radius: 12px;
+  box-shadow: 0 6px 26px rgba(224,58,62,0.7);
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+#big-article img {
+  width: 100%;
+  max-width: 2000px;
+  object-fit: cover;
+}
+#big-article-content {
+  flex: 1 1 480px;
+  padding: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#big-article h3 {
+  font-size: 2rem;
+}
+
+/* FOOTER */
+footer {
+  padding: 2rem 1rem;
+  background: #0a0a0a;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #222;
+}
+@media (max-width: 600px) {
+  footer {
+    font-size: 0.75rem;
+    padding: 1rem;
+  }
+}
+
+/* HERO + BUTTON RESPONSIVENESS */
+@media(max-width: 768px){
+  .hero {
+    padding: 0 1rem;
+    align-items: center;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+  }
+  .hero p {
+    font-size: 1.1rem;
+  }
+  nav {
+    padding: 0.75rem 1rem;
+  }
+  section {
+    padding: 3rem 1rem 4rem;
+  }
+  .btn-primary {
+    font-size: 1rem;
+    padding: 0.7rem 2rem;
+  }
+}
+
+/* VIDEO MODAL */
+#video-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+#video-modal.show {
+  display: flex;
+}
+#video-modal .modal-content {
+  position: relative;
+  width: 95%;
+  max-width: 900px;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+#video-modal iframe {
+  width: 100%;
+  height: 50vh;
+  border: none;
+}
+#modal-close {
+  font-size: 24px;
+  top: 6px;
+  right: 10px;
+  position: absolute;
+  color: white;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* NEWS SECTION */
+#news {
+  background: #000;
+  color: #fff;
+  padding: 1rem;
+}
+h2#news-heading {
+  color: #ff1a1a;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.news-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.news-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 1rem 0;
+  margin: 0 2.5rem;
+}
+.news-card {
+  flex: 0 0 80%;
+  scroll-snap-align: start;
+  background: #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.4);
+  overflow: hidden;
+  color: #fff;
+}
+.news-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.news-card-content {
+  padding: 1rem;
+}
+.news-card-content h3 {
+  color: #ff1a1a;
+}
+.arrow {
+  position: absolute;
+  background: rgba(255, 0, 0, 0.4);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+.arrow.left {
+  left: 0;
+}
+.arrow.right {
+  right: 0;
+}
+.arrow:hover {
+  background: rgba(255, 0, 0, 0.8);
+}
+@media (max-width: 768px) {
+  .news-card {
+    flex: 0 0 90%;
+  }
+  .arrow {
+    display: none;
+  }
+}
+
+
+</style>
+</head>
+<body>
+<header>
+  <nav>
+  <div class="logo" aria-label="Valorant style logo">VALORANT</div>
+
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <div class="nav-links" id="navLinks" role="menubar" aria-label="Main navigation">
+    <a href="#top" onclick="handleNavClick(event)" class="active nav-link" role="menuitem">Home</a>
+    <a href="#featured-agents" onclick="handleNavClick(event)" class="nav-link" role="menuitem">Agents</a>
+    <a href="#competitive" onclick="handleNavClick(event)" class="nav-link" role="menuitem">Competitive</a>
+    <a href="#news" onclick="handleNavClick(event)" class="nav-link" role="menuitem">News</a>
+  </div>
+</nav>
+
+
+</header>
+
+<main>
+  <section id="top" class="hero" role="banner" aria-label="Hero section with main call to action">
+    <h1>Welcome to Valorant<br />The Agent Shooter</h1>
+    <p>Master the art of tactical combat with a diverse cast of agents. Utilize unique abilities and team synergy to dominate the battlefield.</p>
+    <button class="btn-primary" aria-label="Play Valorant button" onclick="window.open('https://playvalorant.com', '_blank')">Play Valorant</button>
+  </section>
+
+  <section id="featured-agents" aria-labelledby="featured-agents-heading">
+    <h2 id="featured-agents-heading">Featured Agents</h2>
+    <div class="agent-grid" role="list">
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Brimstone">
+        <img src="data:image/jpeg;base64,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" />
+        <div class="agent-info">
+          <h3>Brimstone</h3>
+          <p>Controller expert, delivers tactical smokes and incendiary grenades to control the map and provide team support.</p>
+          <button class="btn-secondary" data-video-id="ZKVx1AVwibg" aria-label="Learn more about Jett">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Jett">
+        <img src="https://tiermaker.com/images/chart/chart/valorant-agents-up-to-chamber-1342910/jettpng.png" alt="Jett agent image" />
+        <div class="agent-info">
+          <h3>Jett</h3>
+          <p>A nimble Duelist known for her swift movement and cloudburst smokes that disorient enemies.</p>
+          <button class="btn-secondary" aria-label="Learn more about Jett" data-video-id="enmsXOKyhi4">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Phoenix">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr-pxJo2G6uR284OvcfBGPcwjOq5XAEB3oYA&s" alt="Phoenix agent image" />
+        <div class="agent-info">
+          <h3>Phoenix</h3>
+          <p>A fiery Duelist wielding fire-based abilities, healing powers, and a devastating ultimate that revives him temporarily.</p>
+          <button class="btn-secondary" aria-label="Learn more about Phoenix" data-video-id="ntPwCj2KFpI">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Sage">
+        <img src="https://bamax.es/php/files/uploads/454/sage-valorant-low-poly-83RhJXjJ_200.jpg" alt="Sage agent image" />
+        <div class="agent-info">
+          <h3>Sage</h3>
+          <p>Sentinel healer with abilities to revive teammates, create barriers, and slow enemies to control the flow of fights.</p>
+          <button class="btn-secondary" aria-label="Learn more about Sage" data-video-id="wK0RPVsrsS8">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Sova">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS04FPsGfY7hB7e96y1SOxBFfYB83a0uK60Dg&s" alt="Sova agent image" />
+        <div class="agent-info">
+          <h3>Sova</h3>
+          <p>Recon expert equipped with tracking arrows and drone to gather intelligence and reveal enemy locations.</p>
+          <button class="btn-secondary" aria-label="Learn more about Sova" data-video-id="KizfBW-L1Qk">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Viper">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRknOhXuybK7QrvoPzzty-quYONuOvJuR3nHg&s" alt="Viper agent image" />
+        <div class="agent-info">
+          <h3>Viper</h3>
+          <p>Controller using toxic gas and poison abilities to choke enemy vision and control the battlefield.</p>
+          <button class="btn-secondary" aria-label="Learn more about Viper" data-video-id="k1cj39KWIRs">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Reyna">
+        <img src="https://i.pinimg.com/736x/c4/99/df/c499dfca40e58bdbeadc56da1f2e1444.jpg" alt="Reyna agent image" />
+        <div class="agent-info">
+          <h3>Reyna</h3>
+          <p>A powerful, self-sufficient Duelist who thrives on eliminating enemies and healing through kills.</p>
+          <button class="btn-secondary" aria-label="Learn more about Reyna" data-video-id="k_vGjs73WV4">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Killjoy">
+        <img src="https://vgraphs.com/images/agents/killjoy-avatar.jpg" alt="Killjoy agent image" />
+        <div class="agent-info">
+          <h3>Killjoy</h3>
+          <p>Tech Sentinel who deploys gadgets to lock down areas and control enemy movements.</p>
+          <button class="btn-secondary" aria-label="Learn more about Killjoy" data-video-id="vFuAYnPyEGY">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Skye">
+        <img src="https://i.pinimg.com/736x/c7/ab/3b/c7ab3b2b2e285638197c765827ed1d23.jpg" alt="Skye agent image" />
+        <div class="agent-info">
+          <h3>Skye</h3>
+          <p>Initiator and healer with abilities that scout and blind enemies, and heal teammates.</p>
+          <button class="btn-secondary" aria-label="Learn more about Skye" data-video-id="1ZoNhR-RYag">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Yoru">
+        <img src="https://i.pinimg.com/736x/2c/3d/1b/2c3d1b174cf5b848635ac75c165caea0.jpg" alt="Yoru agent image" />
+        <div class="agent-info">
+          <h3>Yoru</h3>
+          <p>Stealthy Duelist who uses deception and teleportation to outmaneuver enemies.</p>
+          <button class="btn-secondary" aria-label="Learn more about Yoru" data-video-id="DsNe0ht81DQ">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Astra">
+        <img src="https://styles.redditmedia.com/t5_40zntq/styles/communityIcon_24xp03cmr1k61.png" alt="Astra agent image" />
+        <div class="agent-info">
+          <h3>Astra</h3>
+          <p>Cosmic Controller who plants stars that shape and disrupt the battlefield with gravity and smoke effects.</p>
+          <button class="btn-secondary" aria-label="Learn more about Astra" data-video-id="7iK8xg42LZY">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Breach">
+        <img src="https://i.pinimg.com/736x/4b/99/76/4b9976c5a7ab73c59aef8526e1657e6b.jpg" alt="Breach agent image" />
+        <div class="agent-info">
+          <h3>Breach</h3>
+          <p>Initiator with powerful seismic and flash abilities to clear enemy positions and open sites.</p>
+          <button class="btn-secondary" aria-label="Learn more about Breach" data-video-id="9NqcyEi-stQ">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Cypher">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr9KoF_v7KulG3RtKJPFX5eFyP_zRICDJihQ&s" alt="Cypher agent image" />
+        <div class="agent-info">
+          <h3>Cypher</h3>
+          <p>Surveillance expert who gathers intelligence with tripwires and cameras to control the battlefield.</p>
+          <button class="btn-secondary" aria-label="Learn more about Cypher" data-video-id="bIR_TVV5yJI">Learn More</button>
+        </div>
+      </article>
+
+      <article class="agent-card" role="listitem" tabindex="0" aria-label="Agent: Omen">
+        <img src="https://i.pinimg.com/736x/07/24/8a/07248a168651d09f99bd5448f761a4ee.jpg" alt="Omen agent image" />
+        <div class="agent-info">
+          <h3>Omen</h3>
+          <p>Controller with shadowy abilities that teleport and blind enemies to manipulate the battlefield.</p>
+          <button class="btn-secondary" aria-label="Learn more about Omen" data-video-id="2MAtAnMfOVk">Learn More</button>
+        </div>
+      </article>
+
+<div id="video-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <button id="modal-close" aria-label="Close video modal">&times;</button>
+      <iframe id="video-frame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+    </div>
+
+  </section>
+
+<section id="competitive" aria-labelledby="competitive-heading">
+    <h2 id="competitive-heading">COMPETITIVE RANK</h2>
+    <div class="agent-grid" role="list">
+
+      <section id="big-article" aria-labelledby="big-article-heading">
+    <img src="https://support-valorant.riotgames.com/hc/article_attachments/7069133688083" alt="Jett agent big article image" />
+    <div id="big-article-content">
+      <h3 id="big-article-heading"></h3>
+      <p>There are 9 ranks in VALORANT; Iron, Bronze, Silver, Gold, Platinum, Diamond, Ascendant, Immortal, and Radiant. Ranks Iron to Immortal are divided into three tiers from Tier 1 to Tier 3, with Tier 3 being the highest tier within a rank. Players ranked in Immortal and Radiant are featured on a leaderboard.</p>
+    </div>
+  </section>
+    </section>
+
+
+  <section id="news" aria-labelledby="news-heading">
+  <h2 id="news-heading">LATEST NEWS</h2>
+
+  <div class="news-wrapper">
+    <button class="arrow left" aria-label="Scroll left">&#10094;</button>
+
+    <!-- Swipable Container -->
+    <div class="news-carousel" role="list">
+      <!-- News Card -->
+      <section class="news-card" aria-labelledby="big-article-heading">
+        <img src="https://scontent.fmnl30-3.fna.fbcdn.net/v/t39.30808-6/472869352_1149856529829778_8654818438711443674_n.jpg?stp=dst-jpg_s600x600_tt6&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHIzotyYyXd3pdu8Ai7Sm6agbd46dDLKOCBt3jp0Mso4AxgkbB002M8NULkNijf52C_cWVZmcKUu7OJZ-KZ7gmV&_nc_ohc=UmjaHCb1vQsQ7kNvwGdI-w8&_nc_oc=AdkciIm8LhM4n__wfsjqboU2R9RduQIbbcaqMg1C7Io4moGwyHCsb-Wj96YB61hNAzw&_nc_zt=23&_nc_ht=scontent.fmnl30-3.fna&_nc_gid=EF5n3VsDgIYag4aMTcmPeA&oh=00_AfLibQlmJbm0GylTkN0_oTUNwFVVCRyGKQkg2uRDwUp0xg&oe=683AF11A" alt="Caine - Main Duelist" />
+        <div class="news-card-content">
+          <h3 id="big-article-heading">Caine - Main Duelist</h3>
+          <p>Wreaking havoc in Radiant, Caine is showing off his moves on the leaderboard.
+            Your NRX family is proud of your victories out on the field. #NRXCaine
+            #cmartlovesyou #nrxvalorant</p>
+        </div>
+      </section>
+      
+      <section class="news-card" aria-labelledby="big-article-heading">
+        <img src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news_live/a7fbdee2c56aacc352c0db259fa7d2dc0f1116d4-1920x1080.jpg?auto=format&fit=max&w=1920" alt="Caine - Main Duelist" />
+        <div class="news-card-content">
+          <h3 id="big-article-heading">Get Ready for the Finale of the 2025 VCT Season!</h3>
+          <p>Today we're thrilled to announce the initial details for Champions Paris! Champions will bring together the entire VALORANT community and the best professional teams in the 
+            world for the biggest event of the year! To qualify for the event, top teams from the 4 International Leagues battled through a season-long gauntlet of regular season matches 
+            and global events to claim one of the sixteen available spots. From September 12–October 5, the best of the best will converge in France to compete for the Champions trophy 
+            and the title of VALORANT World Champion!</p>
+        </div>
+      </section>
+
+      <section class="news-card" aria-labelledby="big-article-heading">
+        <img src="https://i.ytimg.com/vi/n7NYMVaatxI/maxresdefault.jpg" alt="Caine - Main Duelist" />
+        <div class="news-card-content">
+          <h3 id="big-article-heading">Get Ready for the Finale of the 2025 VCT Season!</h3>
+          <p>Today we're thrilled to announce the initial details for Champions Paris! Champions will bring together the entire VALORANT community and the best professional teams in the 
+            world for the biggest event of the year! To qualify for the event, top teams from the 4 International Leagues battled through a season-long gauntlet of regular season matches 
+            and global events to claim one of the sixteen available spots. From September 12–October 5, the best of the best will converge in France to compete for the Champions trophy 
+            and the title of VALORANT World Champion!</p>
+        </div>
+      </section>
+    </div>
+    <button class="arrow right" aria-label="Scroll right">&#10095;</button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  &copy; 2025 Valorant - Irbe Carlo Tolosa. All rights reserved.
+</footer>
+
+<script>
+  const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('video-frame');
+    const closeBtn = document.getElementById('modal-close');
+
+    document.querySelectorAll('.btn-secondary').forEach(button => {
+      button.addEventListener('click', () => {
+        const videoId = button.getAttribute('data-video-id');
+        if (!videoId) return;
+
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+      
+        modal.classList.add('show');
+      });
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+      iframe.src = ''; 
+    });
+
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+        iframe.src = '';
+      }
+    });
+
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 50) {
+      document.querySelector('header').classList.add('scrolled');
+    } else {
+      document.querySelector('header').classList.remove('scrolled');
+    }
+  });
+  function scrollToNews(event) {
+    event.preventDefault();
+    document.getElementById('news').scrollIntoView({ behavior: 'smooth' });
+  }
+  function scrollToCompe(event) {
+    event.preventDefault();
+    document.getElementById('competitive').scrollIntoView({ behavior: 'smooth' });
+  }
+  function scrollToTop(event) {
+    event.preventDefault();
+    document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function handleNavClick(event) {
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => link.classList.remove('active'));
+
+
+  event.currentTarget.classList.add('active');
+
+ 
+  const href = event.currentTarget.getAttribute('href');
+
+  if (href === '#top') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (href === '#featured-agents') {
+    scrollToFeaturedAgents(event);
+  } else if (href === '#competitive') {
+    scrollToCompe(event);
+  } else if (href === '#news') {
+    scrollToNews(event);
+  }
+  function scrollToTop(event) {
+  event.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+}
+const carousel = document.querySelector('.news-carousel');
+const leftArrow = document.querySelector('.arrow.left');
+const rightArrow = document.querySelector('.arrow.right');
+
+leftArrow.addEventListener('click', () => {
+  carousel.scrollBy({ left: -carousel.clientWidth * 0.9, behavior: 'smooth' });
+});
+
+rightArrow.addEventListener('click', () => {
+  carousel.scrollBy({ left: carousel.clientWidth * 0.9, behavior: 'smooth' });
+});
+
+function autoScroll() {
+  const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+  if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 5) {
+
+    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+  } else {
+
+    carousel.scrollBy({ left: carousel.clientWidth * 0.9, behavior: 'smooth' });
+  }
+}
+
+
+setInterval(autoScroll, 4000);
+
+ document.addEventListener("DOMContentLoaded", function () {
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (event) => {
+
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+      event.target.classList.add('active');
+
+      if (window.innerWidth <= 768) {
+        navLinks.classList.remove('show');
+      }
+    });
+  });
+});
+
+  
+</script>
+</body>
+</html>
